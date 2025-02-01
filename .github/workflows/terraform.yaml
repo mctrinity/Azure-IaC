@@ -33,7 +33,8 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Terraform Init
-        run: terraform init \
+        run: |
+          terraform init \
             -backend-config="resource_group_name=${{ env.backend_rg_name }}" \
             -backend-config="storage_account_name=${{ env.backend_storage_account }}" \
             -backend-config="container_name=${{ env.backend_container }}" \
@@ -70,7 +71,8 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Terraform Init
-        run: terraform init \
+        run: |
+          terraform init \
             -backend-config="resource_group_name=${{ env.backend_rg_name }}" \
             -backend-config="storage_account_name=${{ env.backend_storage_account }}" \
             -backend-config="container_name=${{ env.backend_container }}" \
