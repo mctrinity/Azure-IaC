@@ -50,7 +50,7 @@ jobs:
         run: |
           terraform init \
             -backend-config="resource_group_name=${{ vars.backend_rg_name }}" \
-            -backend-config="storage_account_name=${{ vars.backend_storage_account }}" \
+            -backend-config="storage_account_name=${{ vars.backend_storage_account_id }}" \
             -backend-config="container_name=${{ vars.backend_container }}" \
             -backend-config="key=${{ vars.backend_key }}"
         env:
