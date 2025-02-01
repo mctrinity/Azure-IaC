@@ -44,7 +44,8 @@ jobs:
           backend_storage_account: ${{ vars.backend_storage_account }}
           backend_container: ${{ vars.backend_container }}
           backend_key: ${{ vars.backend_key }}
-  
+          ARM_USE_OIDC: true
+
       - name: Terraform Validate
         run: terraform validate
 
@@ -82,6 +83,7 @@ jobs:
           backend_storage_account: ${{ vars.backend_storage_account }}
           backend_container: ${{ vars.backend_container }}
           backend_key: ${{ vars.backend_key }}
+          ARM_USE_OIDC: true
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
