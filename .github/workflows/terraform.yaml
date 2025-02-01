@@ -34,11 +34,16 @@ jobs:
 
       - name: Terraform Init
         run: terraform init \
-            -backend-config="resource_group_name=${{ vars.backend_rg_name }}" \
-            -backend-config="storage_account_name=${{ vars.backend_storage_account }}" \
-            -backend-config="container_name=${{ vars.backend_container }}" \
-            -backend-config="key=${{ vars.backend_key }}"
-    
+            -backend-config="resource_group_name=${{ env.backend_rg_name }}" \
+            -backend-config="storage_account_name=${{ env.backend_storage_account }}" \
+            -backend-config="container_name=${{ env.backend_container }}" \
+            -backend-config="key=${{ env.backend_key }}"
+        env:
+          backend_rg_name: ${{ vars.backend_rg_name }}
+          backend_storage_account: ${{ vars.backend_storage_account }}
+          backend_container: ${{ vars.backend_container }}
+          backend_key: ${{ vars.backend_key }}
+  
       - name: Terraform Validate
         run: terraform validate
 
@@ -66,10 +71,15 @@ jobs:
 
       - name: Terraform Init
         run: terraform init \
-            -backend-config="resource_group_name=${{ vars.backend_rg_name }}" \
-            -backend-config="storage_account_name=${{ vars.backend_storage_account }}" \
-            -backend-config="container_name=${{ vars.backend_container }}" \
-            -backend-config="key=${{ vars.backend_key }}"
+            -backend-config="resource_group_name=${{ env.backend_rg_name }}" \
+            -backend-config="storage_account_name=${{ env.backend_storage_account }}" \
+            -backend-config="container_name=${{ env.backend_container }}" \
+            -backend-config="key=${{ env.backend_key }}"
+        env:
+          backend_rg_name: ${{ vars.backend_rg_name }}
+          backend_storage_account: ${{ vars.backend_storage_account }}
+          backend_container: ${{ vars.backend_container }}
+          backend_key: ${{ vars.backend_key }}
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
