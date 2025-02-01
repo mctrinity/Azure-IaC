@@ -33,8 +33,12 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Terraform Init
-        run: terraform init
-
+        run: terraform init \
+            -backend-config="resource_group_name=${{ vars.backend_rg_name }}" \
+            -backend-config="storage_account_name=${{ vars.backend_storage_account }}" \
+            -backend-config="container_name=${{ vars.backend_container }}" \
+            -backend-config="key=${{ vars.backend_key }}"
+    
       - name: Terraform Validate
         run: terraform validate
 
@@ -61,7 +65,11 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init \
+            -backend-config="resource_group_name=${{ vars.backend_rg_name }}" \
+            -backend-config="storage_account_name=${{ vars.backend_storage_account }}" \
+            -backend-config="container_name=${{ vars.backend_container }}" \
+            -backend-config="key=${{ vars.backend_key }}"
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
