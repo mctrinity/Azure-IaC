@@ -25,8 +25,8 @@ variable "backend_rg_name" {
   type        = string
 }
 
-variable "backend_storage_account" {
-  description = "Storage account for Terraform backend"
+variable "backend_storage_account_id" {  # Updated to use storage account ID instead of name
+  description = "Storage account ID for Terraform backend"
   type        = string
 }
 
@@ -81,4 +81,20 @@ variable "subnet_name" {
 variable "subnet_address_prefixes" {
   description = "Address prefixes for the subnet"
   type        = list(string)
+}
+
+# Additional Outputs for Reference
+variable "databricks_managed_rg" {
+  description = "Managed resource group created by Databricks"
+  type        = string
+}
+
+variable "virtual_network_id" {
+  description = "ID of the created Virtual Network"
+  type        = string
+}
+
+variable "subnet_id" {
+  description = "ID of the created Subnet"
+  type        = string
 }

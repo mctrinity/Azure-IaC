@@ -1,5 +1,5 @@
 terraform {
-  backend "azurerm" {}  # Leave this empty
+  backend "azurerm" {}
 }
 
 provider "azurerm" {
@@ -9,6 +9,26 @@ provider "azurerm" {
   tenant_id       = var.tenant_id
   client_id       = var.client_id
   client_secret   = var.client_secret
+}
+
+# 🔹 Backend Storage Resources
+resource "azurerm_resource_group" "backend_rg" {
+  name     = var.backend_rg_name
+  location = var.location
+}
+
+resource "azurerm_storage_account" "backend_storage" {
+  name                     = var.backend_storage_account_id
+  resource_group_name      = azurerm_resource_group.backend_rg.name
+  location                 = azurerm_resource_group.backend_rg.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
+resource "azurerm_storage_container" "backend_container" {
+  name                   = var.backend_container
+  storage_account_id     = azurerm_storage_account.backend_storage.id
+  container_access_type  = "private"
 }
 
 # 🔹 Resource Group
