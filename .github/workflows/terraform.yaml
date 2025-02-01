@@ -40,25 +40,19 @@ jobs:
           echo "ARM_SUBSCRIPTION_ID=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -r .subscriptionId)" >> $GITHUB_ENV
           echo "ARM_TENANT_ID=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -r .tenantId)" >> $GITHUB_ENV
 
+      - name: Terraform Init
+        run: terraform init -reconfigure
+
       - name: Terraform Apply Backend Setup
         run: terraform apply -target=azurerm_resource_group.backend_rg -target=azurerm_storage_account.backend_storage -target=azurerm_storage_container.backend_container -auto-approve
 
-      - name: Terraform Init
+      - name: Terraform Reinitialize with Backend
         run: |
           terraform init \
-            -backend-config="resource_group_name=${{ env.backend_rg_name }}" \
-            -backend-config="storage_account_name=${{ env.backend_storage_account }}" \
-            -backend-config="container_name=${{ env.backend_container }}" \
-            -backend-config="key=${{ env.backend_key }}"
-        env:
-          backend_rg_name: ${{ vars.backend_rg_name }}
-          backend_storage_account: ${{ vars.backend_storage_account }}
-          backend_container: ${{ vars.backend_container }}
-          backend_key: ${{ vars.backend_key }}
-          ARM_CLIENT_ID: ${{ env.ARM_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ env.ARM_CLIENT_SECRET }}
-          ARM_SUBSCRIPTION_ID: ${{ env.ARM_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ env.ARM_TENANT_ID }}
+            -backend-config="resource_group_name=${{ vars.backend_rg_name }}" \
+            -backend-config="storage_account_name=${{ vars.backend_storage_account }}" \
+            -backend-config="container_name=${{ vars.backend_container }}" \
+            -backend-config="key=${{ vars.backend_key }}"
 
       - name: Terraform Validate
         run: terraform validate
@@ -94,21 +88,7 @@ jobs:
           echo "ARM_TENANT_ID=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -r .tenantId)" >> $GITHUB_ENV
 
       - name: Terraform Init
-        run: |
-          terraform init \
-            -backend-config="resource_group_name=${{ env.backend_rg_name }}" \
-            -backend-config="storage_account_name=${{ env.backend_storage_account }}" \
-            -backend-config="container_name=${{ env.backend_container }}" \
-            -backend-config="key=${{ env.backend_key }}"
-        env:
-          backend_rg_name: ${{ vars.backend_rg_name }}
-          backend_storage_account: ${{ vars.backend_storage_account }}
-          backend_container: ${{ vars.backend_container }}
-          backend_key: ${{ vars.backend_key }}
-          ARM_CLIENT_ID: ${{ env.ARM_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ env.ARM_CLIENT_SECRET }}
-          ARM_SUBSCRIPTION_ID: ${{ env.ARM_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ env.ARM_TENANT_ID }}
+        run: terraform init -reconfigure
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
