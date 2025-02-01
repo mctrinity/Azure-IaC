@@ -40,7 +40,7 @@ jobs:
           echo "ARM_SUBSCRIPTION_ID=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -r .subscriptionId)" >> $GITHUB_ENV
           echo "ARM_TENANT_ID=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -r .tenantId)" >> $GITHUB_ENV
 
-      - name: Terraform Init
+      - name: Terraform Init (First Run)
         run: terraform init -reconfigure
 
       - name: Terraform Apply Backend Setup
@@ -53,6 +53,11 @@ jobs:
             -backend-config="storage_account_name=${{ vars.backend_storage_account }}" \
             -backend-config="container_name=${{ vars.backend_container }}" \
             -backend-config="key=${{ vars.backend_key }}"
+        env:
+          ARM_CLIENT_ID: ${{ env.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ env.ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ env.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ env.ARM_TENANT_ID }}
 
       - name: Terraform Validate
         run: terraform validate
